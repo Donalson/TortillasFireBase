@@ -228,7 +228,7 @@
 </template>
 
 <script>
-import axios from "axios";
+//import axios from "axios";
 import { mapMutations } from 'vuex';
 import alertify from "vue-alertify";
 import moment from 'moment';
@@ -354,7 +354,7 @@ export default {
       try {
         this.MostrarLoading({Titulo:'Accediendo a la información', Color:'green'})
         this.Pedidos = []
-        let Get = await axios.get(`http://192.168.1.4:3000/Pedidos/${Fecha}`)
+        //let Get = await axios.get(`http://192.168.1.4:3000/Pedidos/${Fecha}`)
         var Temporal = await Get.data;
         if(Temporal.length > 0){
           for( var i in Temporal){
@@ -387,7 +387,7 @@ export default {
 
     async GetClientes() {
       try {
-        let Get = await axios.get(`http://192.168.1.4:3000/Clientes`)
+        //let Get = await axios.get(`http://192.168.1.4:3000/Clientes`)
         for(var i = 0; i < Get.data.length; i++){
           Get.data[i].FullName = Get.data[i].Nombres + " " + Get.data[i].Apellidos
         }
@@ -408,7 +408,7 @@ export default {
             params.Tortilla = 1
             params.Cantidad = this.Pedido.Cantidad
             try{
-              await axios.post(`http://192.168.1.4:3000/Pedidos`, params)
+              //await axios.post(`http://192.168.1.4:3000/Pedidos`, params)
             } catch(e){
               console.log(e)
             }
@@ -419,7 +419,7 @@ export default {
             params.Tortilla = 2
             params.Cantidad = this.Pedido.Cantidad2
             try{
-              await axios.post(`http://192.168.1.4:3000/Pedidos`, params)
+              //await axios.post(`http://192.168.1.4:3000/Pedidos`, params)
             } catch(e){
               console.log(e)
             }
@@ -430,7 +430,7 @@ export default {
             params.Tortilla = 3
             params.Cantidad = this.Pedido.Cantidad3
             try{
-              await axios.post(`http://192.168.1.4:3000/Pedidos`, params)
+              //await axios.post(`http://192.168.1.4:3000/Pedidos`, params)
             } catch(e){
               console.log(e)
             }
@@ -457,27 +457,27 @@ export default {
           if(this.Pedido.Cantidad != Cliente.Cantidad){
             var params = prefijo;params.Tortilla = 1;params.Cantidad = this.Pedido.Cantidad
             if(Cliente.hasOwnProperty('Cantidad')){
-              await axios.put(`http://192.168.1.4:3000/Pedidos`,params)
+              //await axios.put(`http://192.168.1.4:3000/Pedidos`,params)
             }else{
-              await axios.post(`http://192.168.1.4:3000/Pedidos`,params)
+              //await axios.post(`http://192.168.1.4:3000/Pedidos`,params)
             }
           }
 
           if(this.Pedido.Cantidad2 != Cliente.Cantidad2){
             var params = prefijo;params.Tortilla = 2;params.Cantidad = this.Pedido.Cantidad2
             if(Cliente.hasOwnProperty('Cantidad2')){
-              await axios.put(`http://192.168.1.4:3000/Pedidos`,params)
+              //await axios.put(`http://192.168.1.4:3000/Pedidos`,params)
             }else{
-              await axios.post(`http://192.168.1.4:3000/Pedidos`,params)
+              //await axios.post(`http://192.168.1.4:3000/Pedidos`,params)
             }
           }
 
           if(this.Pedido.Cantidad3 != Cliente.Cantidad3){
             var params = prefijo;params.Tortilla = 3;params.Cantidad = this.Pedido.Cantidad3
             if(Cliente.hasOwnProperty('Cantidad3')){
-              await axios.put(`http://192.168.1.4:3000/Pedidos`,params)
+              //await axios.put(`http://192.168.1.4:3000/Pedidos`,params)
             }else{
-              await axios.post(`http://192.168.1.4:3000/Pedidos`,params)
+              //await axios.post(`http://192.168.1.4:3000/Pedidos`,params)
             }
           }
 
@@ -505,7 +505,7 @@ export default {
     },
 
     async Eliminar(parametros){
-      await axios.delete(`http://192.168.1.4:3000/Pedidos`, {data: parametros})
+      //await axios.delete(`http://192.168.1.4:3000/Pedidos`, {data: parametros})
       this.GetPedidos(parametros.Fecha)
       this.$alertify.success("Pedido eliminado")
     },

@@ -128,7 +128,7 @@
 </template>
 
 <script>
-import axios from "axios";
+//import axios from "axios";
 import alertify from "vue-alertify";
 import moment from 'moment';
 export default {
@@ -173,9 +173,9 @@ export default {
   methods: {
     GetTortillas() {
       try {
-        axios.get(`http://192.168.1.4:3000/Tortillas`).then((res) => {
+        /*axios.get(`http://192.168.1.4:3000/Tortillas`).then((res) => {
           this.Tortillas = res.data;
-        });
+        });*/
       } catch (e) {
         console.log(e);
       }
@@ -191,14 +191,14 @@ export default {
           Precio: this.Tortilla.Precio,
           Activo: this.Tortilla.Activa,
         };
-        axios.post(`http://192.168.1.4:3000/Tortillas`, params).then((res) => {
+        /*axios.post(`http://192.168.1.4:3000/Tortillas`, params).then((res) => {
           this.GetTortillas();
           this.Modal = false;
           this.Limpiar();
           this.$alertify.success("Tortilla Registrada");
         }).catch((error) => {
           this.$alertify.error(error);
-        });
+        });*/
       } else {
         this.$alertify.error("Complete el formulario primero");
       }
@@ -214,14 +214,14 @@ export default {
           Precio: this.Tortilla.Precio,
           Activo: this.Tortilla.Activa,
         };
-        axios.put(`http://192.168.1.4:3000/Tortillas/${this.Tortilla.IdTortilla}`,params).then((res) => {
+        /*axios.put(`http://192.168.1.4:3000/Tortillas/${this.Tortilla.IdTortilla}`,params).then((res) => {
           this.GetTortillas();
           this.Modal = false;
           this.Limpiar();
           this.$alertify.success("Tortilla Actualizado");
         }).catch((error) => {
           this.$alertify.error(error);
-        });
+        });*/
       } else {
         this.$alertify.error("Complete el formulario primero");
       }
@@ -232,12 +232,13 @@ export default {
         "Desactivar Tortilla",
         "Desea desactivar " + item.Descripcion,
         () =>
-          axios.delete(`http://192.168.1.4:3000/Tortillas/${item.IdTortilla}`).then(() => {
+          /*axios.delete(`http://192.168.1.4:3000/Tortillas/${item.IdTortilla}`).then(() => {
             this.GetTortillas();
             this.$alertify.success("Inactivacion Realizada");
           }).catch((error) => {
             this.$alertify.error(error);
-          }),
+          })*/
+          this.$alertify.error("Axios Cancelado"),
         () => this.$alertify.error("Inactivacion Cancelada")
       );
     },

@@ -229,7 +229,7 @@
 </template>
 
 <script>
-import axios from "axios";
+//import axios from "axios";
 import { mapMutations } from 'vuex';
 import alertify from "vue-alertify";
 import moment from 'moment';
@@ -282,15 +282,15 @@ export default {
       try {
         this.MostrarLoading({Titulo:'Accediendo a la información', Color:'green'})
         var Ventas = []
-        await axios.get(`http://192.168.1.4:3000/Ventas/${Fecha}`).then((res) => {
+        /*await axios.get(`http://192.168.1.4:3000/Ventas/${Fecha}`).then((res) => {
           Ventas = res.data;
-        });
+        });*/
         if(Ventas.length > 0){
           this.VerCliente = ''
           for(var i = 0; i < Ventas.length; i++){
-            await axios.get(`http://192.168.1.4:3000/DetallesVentas/${Ventas[i].IdVenta}`).then((res) => {
+            /*await axios.get(`http://192.168.1.4:3000/DetallesVentas/${Ventas[i].IdVenta}`).then((res) => {
               Ventas[i].Detalles = (res.data)
-            });
+            });*/
           }
           this.Ventas = await Ventas
           this.VerFechaModal = false
@@ -309,15 +309,15 @@ export default {
       try {
         this.MostrarLoading({Titulo:'Accediendo a la información', Color:'green'})
         var Ventas = []
-        await axios.get(`http://192.168.1.4:3000/VentasDe/${Cliente}`).then((res) => {
+        /*await axios.get(`http://192.168.1.4:3000/VentasDe/${Cliente}`).then((res) => {
           Ventas = res.data;
-        });
+        });*/
         if(Ventas.length > 0){
           this.VerFecha = ''
           for(var i = 0; i < Ventas.length; i++){
-            await axios.get(`http://192.168.1.4:3000/DetallesVentas/${Ventas[i].IdVenta}`).then((res) => {
+            /*await axios.get(`http://192.168.1.4:3000/DetallesVentas/${Ventas[i].IdVenta}`).then((res) => {
               Ventas[i].Detalles = (res.data)
-            });
+            });*/
           }
           this.Ventas = await Ventas
         }else{
@@ -334,7 +334,7 @@ export default {
     async GetClientes() {
       try {
         this.Clientes = []
-        let Get = await axios.get(`http://192.168.1.4:3000/Clientes`)
+        //let Get = await axios.get(`http://192.168.1.4:3000/Clientes`)
         for(var i = 0; i < Get.data.length; i++){
           Get.data[i].FullName = Get.data[i].Nombres + " " + Get.data[i].Apellidos
         }
@@ -347,7 +347,7 @@ export default {
 
     async VerificarPendientes(){
       try{
-        var Get = await axios.get(`http://192.168.1.4:3000/PedidosARegistrar/`)
+        //var Get = await axios.get(`http://192.168.1.4:3000/PedidosARegistrar/`)
         if(Get.data.length > 0){
           this.FechasPedidos = []
           var Fechas = ""
@@ -372,9 +372,9 @@ export default {
         this.MostrarLoading({Titulo:'Accediendo a la información', Color:'green'})
         this.GetClientes()
         var datos
-        await axios.get(`http://192.168.1.4:3000/PedidosARegistrar/${this.VentasFecha}`).then((res) => {
+        /*await axios.get(`http://192.168.1.4:3000/PedidosARegistrar/${this.VentasFecha}`).then((res) => {
           datos = res.data
-        });
+        });*/
         for(var it = 0; it < this.Clientes.length; it++){
           var id = this.Clientes[it].IdCliente
           var pedidos = []
@@ -444,10 +444,10 @@ export default {
 
             //Se crea la venta con la informacion anterior
             try{
-              await axios.post(`http://192.168.1.4:3000/Ventas`, params).then((res) => {
+              /*await axios.post(`http://192.168.1.4:3000/Ventas`, params).then((res) => {
                 //El id devuelto por la api se guarda en la variable ya mencionada
                 id = res.data.Venta
-              });
+              });*/
             } catch(e){
               console.log(e)
             }
@@ -465,7 +465,7 @@ export default {
                 detalle.Total = this.Clientes[i].Pedidos[index].Cantidad * this.Clientes[i].Pedidos[index].Precio
                 try{
                   //Se manda a la base de datos como detalle de la factura creada anteriormente
-                  await axios.post(`http://192.168.1.4:3000/DetallesVentas`, detalle)
+                  //await axios.post(`http://192.168.1.4:3000/DetallesVentas`, detalle)
                 } catch(e){
                   console.log(e)
                 }
@@ -475,7 +475,7 @@ export default {
             //Se cambia el estado de los pedidos a registrados en ventas
             let Cliente = {Fecha: this.VentasFecha, Cliente: this.Clientes[i].IdCliente}
             try{
-              await axios.put(`http://192.168.1.4:3000/PedidosRVenta`, Cliente)
+              //await axios.put(`http://192.168.1.4:3000/PedidosRVenta`, Cliente)
             }catch(e){
               console.log(e)
             }

@@ -350,7 +350,7 @@
 </template>
 
 <script>
-import axios from "axios";
+//import axios from "axios";
 import alertify from "vue-alertify";
 import moment from 'moment';
 export default {
@@ -420,9 +420,9 @@ export default {
   methods: {
     GetClientes() {
       try {
-        axios.get(`http://192.168.1.4:3000/Clientes`).then((res) => {
+        /*axios.get(`http://192.168.1.4:3000/Clientes`).then((res) => {
           this.Clientes = res.data;
-        });
+        });*/
       } catch (e) {
         console.log(e);
       }
@@ -457,7 +457,7 @@ export default {
           params.Foto = NFoto;
           this.SubirFoto(NFoto);
         }
-        axios
+        /*axios
           .post(`http://192.168.1.4:3000/Clientes`, params)
           .then((res) => {
             this.GetClientes();
@@ -467,7 +467,7 @@ export default {
           })
           .catch((error) => {
             this.$alertify.error(error);
-          });
+          });*/
       } else {
         this.$alertify.error("Complete el formulario primero");
       }
@@ -506,7 +506,7 @@ export default {
           params.Foto = NFoto;
           this.SubirFoto(NFoto);
         }
-        axios
+        /*axios
           .put(
             `http://192.168.1.4:3000/Clientes/${this.Cliente.IdCliente}`,
             params
@@ -519,7 +519,7 @@ export default {
           })
           .catch((error) => {
             this.$alertify.error(error);
-          });
+          });*/
       } else {
         this.$alertify.error("Complete el formulario primero");
       }
@@ -530,7 +530,7 @@ export default {
         "Inactivar Cliente",
         "Desea inactivar a " + item.Nombres,
         () =>
-          axios
+          /*axios
             .delete(`http://192.168.1.4:3000/Clientes/${item.IdCliente}`)
             .then(() => {
               this.GetClientes();
@@ -538,7 +538,8 @@ export default {
             })
             .catch((error) => {
               this.$alertify.error(error);
-            }),
+            })*/
+            this.$alertify.error("Axios Cancelado"),
         () => this.$alertify.error("Inactivacion Cancelada")
       );
     },
@@ -586,14 +587,14 @@ export default {
     SubirFoto(Nombre) {
       const formData = new FormData();
       formData.append("Foto", this.Cliente.Foto, Nombre);
-      axios.post("http://192.168.1.4:3000/SubirFoto", formData).then((res) => {
+      /*axios.post("http://192.168.1.4:3000/SubirFoto", formData).then((res) => {
         this.$alertify.success("Foto Guardada");
-      });
+      });*/
     },
 
     BorrarFoto() {
       const data = { FotoVieja: this.Cliente.Vieja };
-      axios.post("http://192.168.1.4:3000/BorrarFoto", data);
+      //axios.post("http://192.168.1.4:3000/BorrarFoto", data);
     },
 
     Limpiar() {

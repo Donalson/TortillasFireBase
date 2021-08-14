@@ -311,7 +311,7 @@
 </template>
 
 <script>
-import axios from "axios";
+//import axios from "axios";
 import { mapMutations } from 'vuex';
 import alertify from "vue-alertify";
 import moment from 'moment';
@@ -376,9 +376,9 @@ export default {
       let Clientes
       this.Clientes = []
       try {
-        await axios.get(`http://192.168.1.4:3000/Clientes`).then((res)=>{
+        /*await axios.get(`http://192.168.1.4:3000/Clientes`).then((res)=>{
           Clientes = res.data
-        })
+        })*/
       } catch (error) {
         console.log(error)
       }
@@ -436,9 +436,9 @@ export default {
     async GetTortillas(){
       let Tortillas
       try {
-        await axios.get(`http://192.168.1.4:3000/Tortillas`).then((res)=>{
+        /*await axios.get(`http://192.168.1.4:3000/Tortillas`).then((res)=>{
           Tortillas = res.data
-        })
+        })*/
       } catch (error) {
         console.log(error)
       }
@@ -450,9 +450,9 @@ export default {
       this.Pedidos = []
       var Pedidos,Peq=0,Med=0,Gra=0
       try {
-        await axios.get(`http://192.168.1.4:3000/Pedidos`).then((res)=>{
+        /*await axios.get(`http://192.168.1.4:3000/Pedidos`).then((res)=>{
           Pedidos = res.data
-        })
+        })*/
       } catch (error) {
         console.log(error)
       }
@@ -493,9 +493,9 @@ export default {
       this.ListaDeClientesV = []
       this.ListaDeClientesV.push('Todos')
       try {
-        await axios.get(`http://192.168.1.4:3000/Ventas`).then((res)=>{
+        /*await axios.get(`http://192.168.1.4:3000/Ventas`).then((res)=>{
           Ventas = res.data
-        })
+        })*/
       } catch (error) {
         console.log(error)
       }
@@ -505,14 +505,14 @@ export default {
         this.ListaDeClientesV.push(FullName)
         var Total = 0
         
-        await axios.get(`http://192.168.1.4:3000/VentasDe/${id}`).then((res) => {
+        /*await axios.get(`http://192.168.1.4:3000/VentasDe/${id}`).then((res) => {
           let Temp = []
           if(this.Selects.VentasPor == "Todas"){Temp=res.data}
           else{Temp = res.data.filter(item=>item.Fecha.includes(this.Fechas.FechaVenta))}
           for(var i = 0;i<Temp.length;i++){
             Total += parseFloat(Temp[i].Total)
           }
-        });
+        });*/
         this.VentasData.push([
           FullName,
           Total
