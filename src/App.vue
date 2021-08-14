@@ -19,7 +19,7 @@
       </div>
 
       <!-- Titulo de barra de navegacion para dispositivos pequeños -->
-      <v-toolbar-title><v-btn plain to="/">Antojitos Heidy</v-btn></v-toolbar-title>
+      <v-toolbar-title><v-btn plain to="/Inicio">Antojitos Heidy</v-btn></v-toolbar-title>
       <v-spacer></v-spacer>
       <!-- Barra de navegacion para dispositivos pequeños -->
       <div class="d-none d-md-block">
@@ -46,7 +46,7 @@
         <v-col cols="4"></v-col>
         <!-- Titulo de la pagina -->
         <v-col cols="12" class="text-center">
-          <v-btn plain to="/"><p class="white--text headline">Antojitos Heidy</p></v-btn>
+          <v-btn plain to="/Inicio"><p class="white--text headline">Antojitos Heidy</p></v-btn>
         </v-col>
         <v-col cols="12">
           <!-- Lista con links de navegacion pra dispositivos grandes -->

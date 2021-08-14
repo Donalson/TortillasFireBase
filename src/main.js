@@ -19,8 +19,23 @@ Vue.use(VueAlertify)
 import VueGoogleCharts from 'vue-google-charts'
 Vue.use(VueGoogleCharts)
 //Importacion de vuefire
-import VueFire from 'vuefire';
-Vue.use(VueFire);
+import firebase from 'firebase/app'
+import 'firebase/firestore'
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDANs-QHYOKwf0jojQgrgqB7xFbCymTa8c",
+  authDomain: "tortillasdeharinaheidy.firebaseapp.com",
+  projectId: "tortillasdeharinaheidy",
+  storageBucket: "tortillasdeharinaheidy.appspot.com",
+  messagingSenderId: "655989018721",
+  appId: "1:655989018721:web:17d262951ddd01c07a5a20",
+  measurementId: "G-E7W2YFL4S5"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
+
+export const db = firebase.firestore();
 
 Vue.config.productionTip = false
 
