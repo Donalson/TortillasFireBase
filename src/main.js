@@ -8,16 +8,19 @@ import '@babel/polyfill'
 import vuetify from './plugins/vuetify';
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@mdi/font/css/materialdesignicons.css'
-//Importacion de Axios
+/*Importacion de Axio
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-Vue.use(VueAxios, axios)
+Vue.use(VueAxios, axios)*/
 //Importacion de Alertas de Alertify
 import VueAlertify from 'vue-alertify'
 Vue.use(VueAlertify)
 //Graficas de Google
 import VueGoogleCharts from 'vue-google-charts'
 Vue.use(VueGoogleCharts)
+//Importacion de vuefire
+import VueFire from 'vuefire';
+Vue.use(VueFire);
 
 Vue.config.productionTip = false
 
