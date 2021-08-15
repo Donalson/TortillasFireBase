@@ -16,11 +16,10 @@
             color="green"
           ></v-text-field>
           <v-spacer></v-spacer>
+          <!-- Formulario de Clientes -->
           <v-dialog v-model="Modal" persistent>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn color="green" dark v-bind="attrs" v-on="on"
-                >Registrar Cliente</v-btn
-              >
+              <v-btn color="green" dark v-bind="attrs" v-on="on">Registrar Cliente</v-btn>
             </template>
             <v-card>
               <v-card-title>
@@ -30,6 +29,7 @@
               <v-card-text>
                 <v-container>
                   <v-row>
+                    <!-- IdCliente -->
                     <v-col cols="12" sm="6" md="4" v-if="ModoEdicion">
                       <v-text-field
                         prepend-icon="mdi-alpha-c-circle"
@@ -39,6 +39,7 @@
                         color="green"
                       ></v-text-field>
                     </v-col>
+                    <!-- Nombres -->
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
                         prepend-icon="mdi-account"
@@ -49,6 +50,7 @@
                         maxlength="30"
                       ></v-text-field>
                     </v-col>
+                    <!-- Apellidos -->
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
                         prepend-icon="mdi-account"
@@ -59,6 +61,7 @@
                         maxlength="30"
                       ></v-text-field>
                     </v-col>
+                    <!-- Direccion -->
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
                         prepend-icon="mdi-directions"
@@ -69,6 +72,7 @@
                         maxlength="50"
                       ></v-text-field>
                     </v-col>
+                    <!-- Telefono -->
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
                         prepend-icon="mdi-cellphone"
@@ -79,6 +83,7 @@
                         type="number"
                       ></v-text-field>
                     </v-col>
+                    <!-- NIT -->
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
                         prepend-icon="mdi-file-document"
@@ -89,6 +94,7 @@
                         maxlength="15"
                       ></v-text-field>
                     </v-col>
+                    <!-- Adelanto -->
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
                         prepend-icon="mdi-head-question-outline"
@@ -99,6 +105,7 @@
                         type="number"
                       ></v-text-field>
                     </v-col>
+                    <!-- Debe -->
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
                         prepend-icon="mdi-head-question-outline"
@@ -109,6 +116,7 @@
                         type="number"
                       ></v-text-field>
                     </v-col>
+                    <!-- Observaciones -->
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
                         prepend-icon="mdi-clipboard-text"
@@ -118,6 +126,7 @@
                         color="green"
                       ></v-text-field>
                     </v-col>
+                    <!-- Foto -->
                     <v-col cols="12" sm="6" md="4">
                       <v-file-input
                         accept="image/*"
@@ -130,6 +139,7 @@
                         v-model="Cliente.Foto"
                       ></v-file-input>
                     </v-col>
+                    <!-- Activo -->
                     <v-col cols="12" sm="6" md="4" v-if="ModoEdicion">
                       <v-checkbox
                         prepend-icon="mdi-alpha-a-circle"
@@ -355,7 +365,7 @@
 
 <script>
 import {db} from '../main';
-//import axios from "axios";
+import {storage} from '../main';
 import alertify from "vue-alertify";
 import moment from 'moment';
 export default {
@@ -511,10 +521,10 @@ export default {
         //Verificar si esta editando la foto
         if (this.Cliente.Foto != null) {
           //Si hay una foto vieja se elimina antes de subir la nueva
-          /*if (this.Cliente.Vieja != "") {
+          if (this.Cliente.Vieja != "") {
             this.BorrarFoto();
-          }*/
-          //Se sube la nuevaa foto
+          }
+          //Se sube la nueva foto
           var NFoto =
             this.Cliente.Nombres +
             " " +
@@ -522,7 +532,7 @@ export default {
             "." +
             this.Cliente.Foto.name.split(".").pop().toLowerCase();
           params.Foto = NFoto;
-          //this.SubirFoto(NFoto);
+          this.SubirFoto(NFoto);
         }
         //Se subo el cliente editado
         try {
@@ -603,19 +613,24 @@ export default {
       this.Perfil = true;
     },
 
-    //Pendiente de arreglar
-    SubirFoto(Nombre) {
-      const formData = new FormData();
-      formData.append("Foto", this.Cliente.Foto, Nombre);
-      /*axios.post("http://192.168.1.4:3000/SubirFoto", formData).then((res) => {
-        this.$alertify.success("Foto Guardada");
-      });*/
+    async SubirFoto(Nombre) {
+      let ext = "img/"+Nombre.split(".").pop().toLowerCase();
+      const Img = storage.ref().child("Clientes/"+Nombre);
+      const metadata = {contentType: ext};
+      try {
+        await Img.put(this.Cliente.Foto,metadata);
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.$alertify.success("Imagen Subida");
+      }
     },
 
-    //Pendiente de arreglar
-    BorrarFoto() {
-      const data = { FotoVieja: this.Cliente.Vieja };
-      //axios.post("http://192.168.1.4:3000/BorrarFoto", data);
+    async BorrarFoto() {
+      const Img = storage.ref().child("Clientes/"+this.Cliente.Vieja);
+      await Img.delete().catch(function(error){
+        console.log(error);
+      })
     },
 
     Limpiar() {

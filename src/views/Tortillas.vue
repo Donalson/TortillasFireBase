@@ -2,6 +2,7 @@
   <v-container>
     <v-row wrap class="mt-5">
       <v-col>
+        <!-- Barra de busqueda -->
         <v-toolbar flat>
           <v-toolbar-title>Tortillas</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
@@ -15,6 +16,7 @@
             color="green"
           ></v-text-field>
           <v-spacer></v-spacer>
+          <!-- Formulario de Tortillas -->
           <v-dialog v-model="Modal" persistent>
             <template v-slot:activator="{ on, attrs }">
               <v-btn color="green" dark v-bind="attrs" v-on="on"
@@ -29,6 +31,7 @@
               <v-card-text>
                 <v-container>
                   <v-row>
+                    <!-- IdTortilla -->
                     <v-col cols="12" sm="6" md="4" v-if="ModoEdicion">
                       <v-text-field
                         prepend-icon="mdi-alpha-c-circle"
@@ -38,6 +41,7 @@
                         color="green"
                       ></v-text-field>
                     </v-col>
+                    <!-- Descripcion -->
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
                         prepend-icon="mdi-card-text"
@@ -48,6 +52,7 @@
                         maxlength="25"
                       ></v-text-field>
                     </v-col>
+                    <!-- Precio -->
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
                         prepend-icon="mdi-check-bold"
@@ -58,6 +63,7 @@
                         type="number"
                       ></v-text-field>
                     </v-col>
+                    <!-- Activa -->
                     <v-col cols="12" sm="6" md="4" v-if="ModoEdicion">
                       <v-checkbox
                         prepend-icon="mdi-alpha-a-circle"
@@ -90,11 +96,12 @@
           </v-dialog>
         </v-toolbar>
 
+        <!-- Tabla con el contenido a mostrar -->
         <v-simple-table fixed-header :search="Buscar">
           <template v-slot:default>
             <thead>
               <tr>
-                <th class="text-left">Cod.</th>
+                <!-- <th class="text-left">Cod.</th> -->
                 <th class="text-left">Descripcion</th>
                 <th class="text-left">Precio</th>
                 <th class="text-left">Fecha de Registro</th>
@@ -104,7 +111,7 @@
             </thead>
             <tbody>
               <tr v-for="(item, index) in Busqueda" :key="index">
-                <td>{{ item.IdTortilla }}</td>
+                <!-- <td>{{ item.IdTortilla }}</td> -->
                 <td>{{ item.Descripcion }} {{ item.Apellidos }}</td>
                 <td>{{ item.Precio }}</td>
                 <td>{{ FechaConFormato(item.FC) }}</td>
@@ -124,6 +131,7 @@
         </v-simple-table>
       </v-col>
     </v-row>
+    
   </v-container>
 </template>
 

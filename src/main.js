@@ -21,6 +21,7 @@ Vue.use(VueGoogleCharts)
 //Importacion de vuefire
 import firebase from 'firebase/app'
 import 'firebase/firestore'
+import 'firebase/storage'
 
 const firebaseConfig = {
   apiKey: "AIzaSyDANs-QHYOKwf0jojQgrgqB7xFbCymTa8c",
@@ -36,6 +37,7 @@ firebase.initializeApp(firebaseConfig);
 //firebase.analytics();
 
 export const db = firebase.firestore();
+export const storage = firebase.storage();
 
 Vue.config.productionTip = false
 
