@@ -112,7 +112,7 @@
             <tbody>
               <tr v-for="(item, index) in Busqueda" :key="index">
                 <!-- <td>{{ item.IdTortilla }}</td> -->
-                <td>{{ item.Descripcion }} {{ item.Apellidos }}</td>
+                <td>{{ item.Descripcion }}</td>
                 <td>{{ item.Precio }}</td>
                 <td>{{ FechaConFormato(item.FC) }}</td>
                 <td v-if="item.FE" >{{ FechaConFormato(item.FE) }}</td>
@@ -121,7 +121,7 @@
                   <v-icon color="yellow" @click="Editar(item)"
                     >mdi-pencil</v-icon
                   >
-                  <v-icon color="red" @click="Eliminar(item)"
+                  <v-icon color="red" @click="Confirmar(item)"
                     >mdi-delete</v-icon
                   >
                 </td>
@@ -136,7 +136,7 @@
 </template>
 
 <script>
-//import axios from "axios";
+import {db} from '../main';
 import alertify from "vue-alertify";
 import moment from 'moment';
 export default {
@@ -179,76 +179,96 @@ export default {
   },
 
   methods: {
-    GetTortillas() {
-      try {
-        /*axios.get(`http://192.168.1.4:3000/Tortillas`).then((res) => {
-          this.Tortillas = res.data;
-        });*/
-      } catch (e) {
-        console.log(e);
-      }
+    async GetTortillas() {
+      //Constante local para guardar las tortillas
+      const Tortillas = [];
+      //Se llaman a las tortillas de la base de datos que estan activas
+      await db.collection("Tortillas").orderBy("Descripcion").get().then((querySnapshot) => {
+        //Se obtiene los datos y el id de cada tortilla y se mueven al array
+        querySnapshot.forEach((doc) => {
+          if(doc.data().Activa == true){
+            let TorData = doc.data();
+            TorData.IdTortilla = doc.id;
+            Tortillas.push(TorData);
+          }
+        });
+      }, this.Tortillas = Tortillas)
+      .catch((error) => {
+          console.log("Error obteniendo documentos: ", error);
+      });
     },
 
-    Agregar() {
+    async Agregar() {
       if (
-        this.Tortilla.Descripcion.length > 0 &&
+        this.Tortilla.Descripcion.length > 3 &&
         this.Tortilla.Precio > 0
       ) {
         var params = {
           Descripcion: this.Tortilla.Descripcion,
           Precio: this.Tortilla.Precio,
           Activo: this.Tortilla.Activa,
+          FC: new Date().toISOString(),
+          FE:'',
+          Activa:true
         };
-        /*axios.post(`http://192.168.1.4:3000/Tortillas`, params).then((res) => {
-          this.GetTortillas();
-          this.Modal = false;
-          this.Limpiar();
-          this.$alertify.success("Tortilla Registrada");
-        }).catch((error) => {
-          this.$alertify.error(error);
-        });*/
+        try {
+          await db.collection('Tortillas').add(params)
+        } catch (error) {
+          console.log(error)
+        }
+        this.GetTortillas();
+        this.Modal = false;
+        this.Limpiar();
+        this.$alertify.success("Tortilla Registrada");
       } else {
         this.$alertify.error("Complete el formulario primero");
       }
     },
 
-    Actualizar() {
+    async Actualizar() {
       if (
-        this.Tortilla.Descripcion.length > 0 &&
+        this.Tortilla.Descripcion.length > 3 &&
         this.Tortilla.Precio > 0
       ) {
         var params = {
           Descripcion: this.Tortilla.Descripcion,
           Precio: this.Tortilla.Precio,
-          Activo: this.Tortilla.Activa,
+          Activa: this.Tortilla.Activa,
+          FE: new Date().toISOString()
         };
-        /*axios.put(`http://192.168.1.4:3000/Tortillas/${this.Tortilla.IdTortilla}`,params).then((res) => {
-          this.GetTortillas();
-          this.Modal = false;
-          this.Limpiar();
-          this.$alertify.success("Tortilla Actualizado");
-        }).catch((error) => {
-          this.$alertify.error(error);
-        });*/
+        try {
+          await db.collection('Tortillas').doc(this.Tortilla.IdTortilla).update(params)
+        } catch (error) {
+          console.log(error)
+        }
+        this.GetTortillas();
+        this.Modal = false;
+        this.Limpiar();
+        this.$alertify.success("Tortilla Actualizado");
       } else {
         this.$alertify.error("Complete el formulario primero");
       }
     },
 
-    Eliminar(item) {
+    Confirmar(item) {
+      //Ventana de confirmacion de desactivacion del Tortilla
       this.$alertify.confirmWithTitle(
-        "Desactivar Tortilla",
-        "Desea desactivar " + item.Descripcion,
-        () =>
-          /*axios.delete(`http://192.168.1.4:3000/Tortillas/${item.IdTortilla}`).then(() => {
-            this.GetTortillas();
-            this.$alertify.success("Inactivacion Realizada");
-          }).catch((error) => {
-            this.$alertify.error(error);
-          })*/
-          this.$alertify.error("Axios Cancelado"),
+        "Inactivar Tortilla",
+        "Desea inactivar a " + item.Descripcion,
+        () => this.Eliminar(item.IdTortilla),
         () => this.$alertify.error("Inactivacion Cancelada")
       );
+    },
+
+    async Eliminar(ID){
+      //En caso de que se confirme la eliminacion se obtendra la id y se desactivara
+      try {
+        await db.collection('Tortillas').doc(ID).update({Activa:false});
+      } catch (error) {
+        console.log(error)
+      }
+      this.GetTortillas();
+      this.$alertify.success("Inactivacion Realizada");
     },
 
     Editar(item) {
@@ -271,7 +291,7 @@ export default {
     },
 
     FechaConFormato(Fecha){
-        return moment(Fecha).locale('es-mx', null).format('dddd, D [de] MMMM [de] YYYY  h:m A')
+      return moment(Fecha).locale('es-mx', null).format('dddd, D [de] MMMM [de] YYYY  h:m A')
     }
   },
 };

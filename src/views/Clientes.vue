@@ -402,7 +402,7 @@ export default {
         Adelanto: 0,
         Debe: 0,
         Observacion: "",
-        Foto: "",
+        Foto: null,
         FC: "",
         FE: "",
         Activo: null,
@@ -437,8 +437,8 @@ export default {
       //Constante local para guardar los clientes
       const Clientes = [];
       //Se llaman a los clientes de la base de datos que estan activos
-      db.collection("clientes").orderBy("Nombres").get().then((querySnapshot) => {
-        //Se obtiene los datos y el id de cada cliente y se mueven a la constante
+      await db.collection("clientes").orderBy("Nombres").get().then((querySnapshot) => {
+        //Se obtiene los datos y el id de cada cliente y se mueven al array
         querySnapshot.forEach((doc) => {
           if(doc.data().Activo == true){
             let CliData = doc.data();
@@ -486,7 +486,7 @@ export default {
         }
         //Se sube el cliente a la base de datos, se actulizan los datos locales, se cierra el modal, se limpia y se manda una notificacion de exito
         try {
-          await db.collection('clientes').add(params);
+          await db.collection('clientes').add(params)
         } catch (error) {
           console.log(error)
         }
@@ -494,7 +494,6 @@ export default {
         this.Modal = false;
         this.Limpiar();
         this.$alertify.success("Cliente Registrado");
-
       } else {
         this.$alertify.error("Complete el formulario primero");
       }
@@ -536,7 +535,7 @@ export default {
         }
         //Se subo el cliente editado
         try {
-          await db.collection('clientes').doc(this.Cliente.IdCliente).update(params);
+          await db.collection('clientes').doc(this.Cliente.IdCliente).update(params)
         } catch (error) {
           console.log(error)
         }
@@ -561,7 +560,11 @@ export default {
 
     async Eliminar(ID){
       //En caso de que se confirme la eliminacion se obtendra la id y se desactivara
-      await db.collection('clientes').doc(ID).update({Activo:false});
+      try {
+        await db.collection('clientes').doc(ID).update({Activo:false});
+      } catch (error) {
+        console.log(error)
+      }
       this.GetClientes();
       this.$alertify.success("Inactivacion Realizada");
     },
@@ -584,7 +587,7 @@ export default {
       this.Modal = true;
     },
 
-    MostrarPerfil(item) {
+    async MostrarPerfil(item) {
       //Mover informacion completa del cliente hacia el modal
       this.InfoPerfil = [];
       this.InfoPerfil.IdCliente = item.IdCliente;
@@ -598,7 +601,11 @@ export default {
       this.InfoPerfil.Observacion = item.Observacion;
       //Verificar si existe una foto personalizada y mostrarla, si no se mostrara una foto stock
       if (item.Foto != "") {
-        this.InfoPerfil.Foto = "http://192.168.1.4:3000/" + item.Foto;
+        let temp = null
+        await storage.ref().child("Clientes/"+item.Foto).getDownloadURL().then((url)=>{
+          temp = url
+        })
+        this.InfoPerfil.Foto = temp
       }else{
         this.InfoPerfil.Foto = "https://w7.pngwing.com/pngs/786/899/png-transparent-computer-icons-custumer-black-business-desktop-wallpaper-thumbnail.png"
       }
@@ -613,9 +620,9 @@ export default {
       this.Perfil = true;
     },
 
-    async SubirFoto(Nombre) {
-      let ext = "img/"+Nombre.split(".").pop().toLowerCase();
-      const Img = storage.ref().child("Clientes/"+Nombre);
+    async SubirFoto(NombreF) {
+      let ext = "img/"+NombreF.split(".").pop().toLowerCase();
+      const Img = storage.ref().child("Clientes/"+NombreF);
       const metadata = {contentType: ext};
       try {
         await Img.put(this.Cliente.Foto,metadata);
